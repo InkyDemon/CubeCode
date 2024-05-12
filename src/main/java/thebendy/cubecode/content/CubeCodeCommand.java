@@ -29,8 +29,8 @@ public class CubeCodeCommand {
                     try {
                         ScriptManager.evalCode(code, 1, "eval", properties);
                     }
-                    catch (EcmaError error) {
-                        context.getSource().sendError(Text.of(error.getErrorMessage()));
+                    catch (Exception error) {
+                        context.getSource().sendError(Text.of(error.getLocalizedMessage()));
                     }
 
                     return 1;
