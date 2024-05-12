@@ -1,12 +1,8 @@
 package thebendy.cubecode.api.script.code.entities;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import thebendy.cubecode.api.script.code.ScriptVector;
 
 public class ScriptEntity<T extends Entity> {
@@ -24,6 +20,10 @@ public class ScriptEntity<T extends Entity> {
 
     protected ScriptEntity(T entity) {
         this.entity = entity;
+    }
+
+    public T getMinecraftEntity() {
+        return this.entity;
     }
 
     public void setPosition(double x, double y, double z) {

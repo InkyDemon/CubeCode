@@ -10,6 +10,10 @@ public class ScriptPlayer extends ScriptEntity<PlayerEntity> {
         super(entity);
     }
 
+    public PlayerEntity getMinecraftPlayer() {
+        return this.entity;
+    }
+
     public void send(String message) {
         this.entity.sendMessage(Text.of(message));
     }
