@@ -7,6 +7,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import org.mozilla.javascript.EcmaError;
 import thebendy.cubecode.api.script.ScriptManager;
+import thebendy.cubecode.api.script.code.entities.ScriptEntity;
 
 import java.util.HashMap;
 
@@ -22,14 +23,14 @@ public class CubeCodeCommand {
         return literal("script")
                 .then(literal("eval").then(argument("script", StringArgumentType.string()).executes(context -> {
                     HashMap<String, Object> properties = new HashMap<>();
-                    properties.put("Player", context.getSource().getPlayer().networkHandler.);
+                    properties.put("Player", ScriptEntity.create(context.getSource().getPlayer()));
                     String code = StringArgumentType.getString(context, "script");
 
                     try {
                         ScriptManager.evalCode(code, 1, "eval", properties);
                     }
-                    catch (Exception error) {
-                        context.getSource().sendError(Text.of(error.getLocalizedMessage()));
+                    catch (EcmaError error) {
+                        context.getSource().sendError(Text.of(error.getErrorMessage()));
                     }
 
                     return 1;
