@@ -18,7 +18,7 @@ public class ScriptManager {
 
     public static void evalCode(String code, int line, String sourceName, @Nullable Map<String, Object> properties) throws EcmaError {
         Context runContext = Context.enter();
-        ScriptableObject scope = runContext.initSafeStandardObjects();
+        ScriptableObject scope = runContext.initStandardObjects();
 
         if (properties != null) {
             for (var property : properties.entrySet()) {
