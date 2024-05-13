@@ -5,6 +5,10 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.argument.MessageArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import thebendy.cubecode.api.scripts.code.ScriptFactory;
+import thebendy.cubecode.api.scripts.code.ScriptServer;
+import thebendy.cubecode.api.scripts.code.ScriptWorld;
+import thebendy.cubecode.api.scripts.code.entities.ScriptEntity;
 import thebendy.cubecode.CubeCode;
 import thebendy.cubecode.api.script.ScriptManager;
 
@@ -22,7 +26,10 @@ public class CubeCodeCommand {
         return literal("script")
                 .then(literal("eval").then(argument("script", MessageArgumentType.message()).executes(context -> {
                     HashMap<String, Object> properties = new HashMap<>();
-                    properties.put("Player", context.getSource().getPlayer());
+                    properties.put("Player", ScriptEntity.create(context.getSource().getPlayer()));
+                    properties.put("Server", new ScriptServer(context.getSource().getServer()));
+                    properties.put("World", new ScriptWorld(context.getSource().getWorld()));
+                    properties.put("CubeCode", new ScriptFactory());
                     String code = MessageArgumentType.getMessage(context, "script").getString();
 
                     try {
