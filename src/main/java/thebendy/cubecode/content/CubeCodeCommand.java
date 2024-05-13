@@ -10,7 +10,7 @@ import thebendy.cubecode.api.scripts.code.ScriptServer;
 import thebendy.cubecode.api.scripts.code.ScriptWorld;
 import thebendy.cubecode.api.scripts.code.entities.ScriptEntity;
 import thebendy.cubecode.CubeCode;
-import thebendy.cubecode.api.script.ScriptManager;
+import thebendy.cubecode.api.scripts.ScriptManager;
 
 import java.util.HashMap;
 

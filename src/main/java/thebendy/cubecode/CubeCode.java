@@ -3,9 +3,8 @@ package thebendy.cubecode;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.WorldSavePath;
-import thebendy.cubecode.api.script.ScriptManager;
+import thebendy.cubecode.api.scripts.ScriptManager;
 import thebendy.cubecode.content.CubeCodeCommand;
 
 import java.io.File;

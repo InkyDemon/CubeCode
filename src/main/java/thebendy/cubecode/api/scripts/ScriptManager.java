@@ -1,4 +1,4 @@
-package thebendy.cubecode.api.script;
+package thebendy.cubecode.api.scripts;
 
 import org.jetbrains.annotations.Nullable;
 import org.mozilla.javascript.Context;
