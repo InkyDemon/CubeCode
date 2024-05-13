@@ -7,7 +7,6 @@ import org.mozilla.javascript.ScriptableObject;
 
 import java.io.File;
 import java.util.Map;
-import java.util.UUID;
 
 public class ScriptManager {
     private final File scriptsFolder;

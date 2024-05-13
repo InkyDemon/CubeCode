@@ -2,8 +2,18 @@ package thebendy.cubecode.api.script.code.entities;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageSources;
+import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.MutableRegistry;
+import net.minecraft.registry.Registries;
+import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import thebendy.cubecode.api.script.code.ScriptVector;
+import thebendy.cubecode.api.script.code.ScriptWorld;
 
 public class ScriptEntity<T extends Entity> {
     protected T entity;
@@ -74,6 +84,18 @@ public class ScriptEntity<T extends Entity> {
 
     public ScriptVector getVelocity(double x, double y, double z) {
         return new ScriptVector(this.entity.getVelocity());
+    }
+
+    public ScriptWorld getWorld() {
+        return new ScriptWorld(this.entity.getWorld());
+    }
+
+    public void swingHand(String hand) {
+        ((LivingEntity)this.entity).swingHand(Hand.valueOf(hand.toUpperCase()+"_HAND"), true);
+    }
+
+    public void damage(float damage) {
+        this.entity.damage(this.entity.getDamageSources().create(DamageTypes.GENERIC), damage);
     }
 
     public void kill() {
