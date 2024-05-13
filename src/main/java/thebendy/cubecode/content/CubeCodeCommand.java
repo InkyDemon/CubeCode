@@ -43,7 +43,10 @@ public class CubeCodeCommand {
                 })))
                 .then(literal("exec").then(argument("scriptId", MessageArgumentType.message()).executes(context -> {
                     HashMap<String, Object> properties = new HashMap<>();
-                    properties.put("Player", context.getSource().getPlayer());
+                    properties.put("Player", ScriptEntity.create(context.getSource().getPlayer()));
+                    properties.put("Server", new ScriptServer(context.getSource().getServer()));
+                    properties.put("World", new ScriptWorld(context.getSource().getWorld()));
+                    properties.put("CubeCode", new ScriptFactory());
                     String scriptId = MessageArgumentType.getMessage(context, "scriptId").getString();
 
                     try {
