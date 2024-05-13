@@ -1,4 +1,4 @@
-package thebendy.cubecode.api.script.code;
+package thebendy.cubecode.api.scripts.code;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -60,6 +60,10 @@ public class ScriptVector {
                 this.x / length,
                 this.y / length,
                 this.z / length);
+    }
+
+    public BlockPos toBlockPos() {
+        return new BlockPos((int) this.x, (int) this.y, (int) this.z);
     }
 
     public String toString() {

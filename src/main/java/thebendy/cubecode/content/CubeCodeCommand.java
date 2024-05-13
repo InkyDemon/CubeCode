@@ -5,10 +5,11 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import org.mozilla.javascript.EcmaError;
-import thebendy.cubecode.api.script.ScriptManager;
-import thebendy.cubecode.api.script.code.ScriptFactory;
-import thebendy.cubecode.api.script.code.entities.ScriptEntity;
+import thebendy.cubecode.api.scripts.ScriptManager;
+import thebendy.cubecode.api.scripts.code.ScriptFactory;
+import thebendy.cubecode.api.scripts.code.ScriptServer;
+import thebendy.cubecode.api.scripts.code.ScriptWorld;
+import thebendy.cubecode.api.scripts.code.entities.ScriptEntity;
 
 import java.util.HashMap;
 
@@ -25,6 +26,8 @@ public class CubeCodeCommand {
                 .then(literal("eval").then(argument("script", StringArgumentType.string()).executes(context -> {
                     HashMap<String, Object> properties = new HashMap<>();
                     properties.put("Player", ScriptEntity.create(context.getSource().getPlayer()));
+                    properties.put("Server", new ScriptServer(context.getSource().getServer()));
+                    properties.put("World", new ScriptWorld(context.getSource().getWorld()));
                     properties.put("CubeCode", new ScriptFactory());
                     String code = StringArgumentType.getString(context, "script");
 

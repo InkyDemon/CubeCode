@@ -1,19 +1,15 @@
-package thebendy.cubecode.api.script.code.entities;
+package thebendy.cubecode.api.scripts.code.entities;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.MutableRegistry;
 import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Hand;
-import thebendy.cubecode.api.script.code.ScriptVector;
-import thebendy.cubecode.api.script.code.ScriptWorld;
+import net.minecraft.util.Identifier;
+import thebendy.cubecode.api.scripts.code.ScriptVector;
+import thebendy.cubecode.api.scripts.code.ScriptWorld;
 
 public class ScriptEntity<T extends Entity> {
     protected T entity;
@@ -90,12 +86,64 @@ public class ScriptEntity<T extends Entity> {
         return new ScriptWorld(this.entity.getWorld());
     }
 
+    public String getDimension() {
+        return this.entity.getWorld().getDimension().toString();
+    }
+
     public void swingHand(String hand) {
         ((LivingEntity)this.entity).swingHand(Hand.valueOf(hand.toUpperCase()+"_HAND"), true);
     }
 
     public void damage(float damage) {
-        this.entity.damage(this.entity.getDamageSources().create(DamageTypes.GENERIC), damage);
+        this.damage("generic", damage);
+    }
+
+    public void damage(String damageType, float damage) {
+        this.entity.damage(this.entity.getDamageSources().create(RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier(damageType))), damage);
+    }
+
+    public float getDistanceTraveled() {
+        return this.entity.distanceTraveled;
+    }
+
+    public String getId() {
+        return Registries.ENTITY_TYPE.getId(this.entity.getType()).toString();
+    }
+
+    public String getName() {
+        return this.entity.getName().getLiteralString();
+    }
+
+    public String getFacing() {
+        return this.entity.getFacing().getName();
+    }
+
+    public float getWidth() {
+        return this.entity.getWidth();
+    }
+
+    public float getHeight() {
+        return this.entity.getHeight();
+    }
+
+    public boolean isPlayer() {
+        return this.entity.isPlayer();
+    }
+
+    public void setGlowing(boolean isGlowing) {
+        this.entity.setGlowing(isGlowing);
+    }
+
+    public boolean isGlowing() {
+        return this.entity.isGlowing();
+    }
+
+    public float getMovementSpeed() {
+        return ((LivingEntity)this.entity).getMovementSpeed();
+    }
+
+    public void setMovementSpeed(float movementSpeed) {
+        ((LivingEntity)this.entity).setMovementSpeed(movementSpeed);
     }
 
     public void kill() {
