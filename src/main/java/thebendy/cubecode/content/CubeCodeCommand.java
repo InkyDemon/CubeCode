@@ -1,5 +1,6 @@
 package thebendy.cubecode.content;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.argument.MessageArgumentType;
@@ -11,6 +12,7 @@ import thebendy.cubecode.api.scripts.code.ScriptWorld;
 import thebendy.cubecode.api.scripts.code.entities.ScriptEntity;
 import thebendy.cubecode.CubeCode;
 import thebendy.cubecode.api.scripts.ScriptManager;
+import thebendy.cubecode.utils.CubeCodeException;
 
 import java.util.HashMap;
 
@@ -24,22 +26,22 @@ public class CubeCodeCommand {
 
     private LiteralArgumentBuilder<ServerCommandSource> scriptSubCommand() {
         return literal("script")
-                .then(literal("eval").then(argument("script", MessageArgumentType.message()).executes(context -> {
+                .then(literal("eval").then(argument("code", MessageArgumentType.message()).executes(context -> {
                     HashMap<String, Object> properties = new HashMap<>();
                     properties.put("Player", ScriptEntity.create(context.getSource().getPlayer()));
                     properties.put("Server", new ScriptServer(context.getSource().getServer()));
                     properties.put("World", new ScriptWorld(context.getSource().getWorld()));
                     properties.put("CubeCode", new ScriptFactory());
-                    String code = MessageArgumentType.getMessage(context, "script").getString();
+                    String code = MessageArgumentType.getMessage(context, "code").getString();
 
                     try {
                         ScriptManager.evalCode(code, 1, "eval", properties);
                     }
-                    catch (Exception error) {
-                        context.getSource().sendError(Text.of(error.getLocalizedMessage()));
+                    catch (CubeCodeException exception) {
+                        context.getSource().sendError(Text.of(exception.getLocalizedMessage()));
                     }
 
-                    return 1;
+                    return Command.SINGLE_SUCCESS;
                 })))
                 .then(literal("exec").then(argument("scriptId", MessageArgumentType.message()).executes(context -> {
                     HashMap<String, Object> properties = new HashMap<>();
@@ -53,11 +55,11 @@ public class CubeCodeCommand {
                         CubeCode.scriptManager.updateScripts();
                         CubeCode.scriptManager.executeScript(scriptId, properties);
                     }
-                    catch (Exception error) {
-                        context.getSource().sendError(Text.of(error.getLocalizedMessage()));
+                    catch (CubeCodeException exception) {
+                        context.getSource().sendError(Text.of(exception.getLocalizedMessage()));
                     }
 
-                    return 1;
+                    return Command.SINGLE_SUCCESS;
                 })));
     }
 }
