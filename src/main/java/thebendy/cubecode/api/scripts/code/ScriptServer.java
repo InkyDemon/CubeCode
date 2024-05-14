@@ -2,6 +2,7 @@ package thebendy.cubecode.api.scripts.code;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
+import thebendy.cubecode.api.scripts.code.cubecode.CubeCodeStates;
 import thebendy.cubecode.api.scripts.code.entities.ScriptPlayer;
 
 import java.util.ArrayList;
@@ -51,5 +52,9 @@ public class ScriptServer {
 
     public ScriptPlayer getPlayer(String nickName) {
         return (ScriptPlayer) ScriptPlayer.create(this.server.getPlayerManager().getPlayer(nickName));
+    }
+
+    public CubeCodeStates getStates() {
+        return new CubeCodeStates(this.server);
     }
 }
