@@ -1,7 +1,10 @@
 package thebendy.cubecode.content;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.argument.MessageArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -11,6 +14,7 @@ import thebendy.cubecode.api.scripts.code.ScriptWorld;
 import thebendy.cubecode.api.scripts.code.entities.ScriptEntity;
 import thebendy.cubecode.CubeCode;
 import thebendy.cubecode.api.scripts.ScriptManager;
+import thebendy.cubecode.client.gui.TestGui;
 
 import java.util.HashMap;
 
@@ -39,7 +43,7 @@ public class CubeCodeCommand {
                         context.getSource().sendError(Text.of(error.getLocalizedMessage()));
                     }
 
-                    return 1;
+                    return Command.SINGLE_SUCCESS;
                 })))
                 .then(literal("exec").then(argument("scriptId", MessageArgumentType.message()).executes(context -> {
                     HashMap<String, Object> properties = new HashMap<>();
@@ -57,7 +61,7 @@ public class CubeCodeCommand {
                         context.getSource().sendError(Text.of(error.getLocalizedMessage()));
                     }
 
-                    return 1;
+                    return Command.SINGLE_SUCCESS;
                 })));
     }
 }
