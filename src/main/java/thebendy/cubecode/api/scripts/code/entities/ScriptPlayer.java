@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 import thebendy.cubecode.api.scripts.code.ScriptVector;
 import thebendy.cubecode.api.scripts.code.ScriptWorld;
+import thebendy.cubecode.api.scripts.code.cubecode.CubeCodeStates;
 
 public class ScriptPlayer extends ScriptEntity<PlayerEntity> {
     public ScriptPlayer(PlayerEntity entity) {
@@ -16,6 +17,10 @@ public class ScriptPlayer extends ScriptEntity<PlayerEntity> {
 
     public PlayerEntity getMinecraftPlayer() {
         return this.entity;
+    }
+
+    public CubeCodeStates getStates() {
+        return new CubeCodeStates(this.entity);
     }
 
     public void send(String message) {
