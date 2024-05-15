@@ -36,7 +36,7 @@ public class ScriptManager {
         });
     }
 
-    public static void evalCode(String code, int line, String sourceName, @Nullable Map<String, Object> properties) throws Exception {
+    public static void evalCode(String code, int line, String sourceName, @Nullable Map<String, Object> properties) {
         Context runContext = Context.enter();
         runContext.setLanguageVersion(Context.VERSION_ES6);
         ScriptableObject scope = runContext.initStandardObjects();

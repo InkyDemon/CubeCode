@@ -66,6 +66,10 @@ public class ScriptVector {
         return new BlockPos((int) this.x, (int) this.y, (int) this.z);
     }
 
+    public Vec3d toVec3d() {
+        return new Vec3d(this.x, this.y, this.z);
+    }
+
     public String toString() {
         return "("+x+", "+y+", "+z+")";
     }
