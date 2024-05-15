@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.util.WorldSavePath;
 import thebendy.cubecode.api.scripts.ScriptManager;
 import thebendy.cubecode.content.CubeCodeCommand;
+import thebendy.cubecode.content.CubeCodeKeyBindings;
 
 import java.io.File;
 
@@ -16,9 +17,9 @@ public class CubeCode implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            new CubeCodeCommand(dispatcher);
-        });
+        CubeCodeKeyBindings.init();
+
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> new CubeCodeCommand(dispatcher));
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             File cubecodeDir = new File(server.getSavePath(WorldSavePath.ROOT).getParent().toFile(), MOD_ID);

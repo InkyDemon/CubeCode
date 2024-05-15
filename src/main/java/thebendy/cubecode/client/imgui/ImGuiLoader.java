@@ -1,19 +1,24 @@
 package thebendy.cubecode.client.imgui;
 
-import imgui.*;
+import imgui.ImFontAtlas;
+import imgui.ImFontConfig;
+import imgui.ImGui;
+import imgui.ImGuiIO;
+import imgui.ImGuiStyle;
 import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import net.minecraft.client.MinecraftClient;
-import thebendy.cubecode.client.CubeCodeClient;
-import thebendy.cubecode.client.gui.Renderable;
+
+import java.util.ArrayList;
 
 import static org.lwjgl.glfw.GLFW.glfwGetCurrentContext;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 
 public class ImGuiLoader {
-    public static final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
+    private static final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
+    private static final ArrayList<Renderable> renderstack = new ArrayList<>();
     public static final ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
 
     private static long windowHandle;
@@ -23,9 +28,7 @@ public class ImGuiLoader {
         final ImGuiIO io = ImGui.getIO();
 
         io.setIniFilename(null);
-        io.addConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
-        io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
-        io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
+        io.addConfigFlags(ImGuiConfigFlags.NavEnableKeyboard | ImGuiConfigFlags.DockingEnable);
         io.setConfigViewportsNoTaskBarIcon(true);
 
         final ImFontAtlas fontAtlas = io.getFonts();
@@ -55,7 +58,7 @@ public class ImGuiLoader {
         imGuiGlfw.newFrame();
         ImGui.newFrame();
 
-        for (Renderable renderable: CubeCodeClient.renderstack) {
+        for (Renderable renderable: renderstack) {
             MinecraftClient.getInstance().getProfiler().push("ImGui Render/"+renderable.getName());
             renderable.getTheme().preRender();
             renderable.render();
@@ -76,5 +79,15 @@ public class ImGuiLoader {
             ImGui.renderPlatformWindowsDefault();
             glfwMakeContextCurrent(backupWindowPtr);
         }
+    }
+
+    public static Renderable pushRenderable(Renderable renderable) {
+        renderstack.add(renderable);
+        return renderable;
+    }
+
+    public static Renderable pullRenderable(Renderable renderable) {
+        renderstack.remove(renderable);
+        return renderable;
     }
 }
