@@ -1,4 +1,4 @@
-package thebendy.cubecode.client.gui;
+package thebendy.cubecode.client.imgui;
 
 public interface Renderable {
     String getName();
