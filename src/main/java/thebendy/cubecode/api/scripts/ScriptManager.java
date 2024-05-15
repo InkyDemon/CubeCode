@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.Nullable;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
+import thebendy.cubecode.utils.CubeCodeException;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,11 +38,11 @@ public class ScriptManager {
         scripts = newScripts;
     }
 
-    public void executeScript(String scriptId, @Nullable Map<String, Object> properties) {
+    public void executeScript(String scriptId, @Nullable Map<String, Object> properties) throws CubeCodeException {
         scripts.get(scriptId).execute(scriptId, properties);
     }
 
-    public static void evalCode(String code, int line, String sourceName, @Nullable Map<String, Object> properties) {
+    public static void evalCode(String code, int line, String sourceName, @Nullable Map<String, Object> properties) throws CubeCodeException {
         Context runContext = Context.enter();
         runContext.setLanguageVersion(Context.VERSION_ES6);
         ScriptableObject scope = runContext.initStandardObjects();
@@ -52,7 +53,13 @@ public class ScriptManager {
             }
         }
 
-        runContext.evaluateString(scope, code, sourceName, line, null);
+        try {
+            runContext.evaluateString(scope, code, sourceName, line, null);
+        }
+        catch (Exception exception) {
+            throw new CubeCodeException(exception.getLocalizedMessage(), sourceName);
+        }
+
         runContext.close();
     }
 }

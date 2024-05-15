@@ -1,6 +1,7 @@
 package thebendy.cubecode.utils;
 
-public class CubeCodeException extends Exception{
+public class CubeCodeException extends Exception {
+
     public final String sourceName;
 
     public CubeCodeException(String message, String sourceName) {
@@ -12,4 +13,5 @@ public class CubeCodeException extends Exception{
         super(message);
         this.sourceName = "";
     }
+
 }

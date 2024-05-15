@@ -1,77 +1,57 @@
 package thebendy.cubecode.client.imgui;
 
+import com.google.common.collect.ConcurrentHashMultiset;
 import imgui.ImFontAtlas;
-import imgui.ImFontConfig;
 import imgui.ImGui;
 import imgui.ImGuiIO;
-import imgui.ImGuiStyle;
-import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import net.minecraft.client.MinecraftClient;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
-import static org.lwjgl.glfw.GLFW.glfwGetCurrentContext;
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class ImGuiLoader {
-    private static final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
-    private static final ArrayList<Renderable> renderstack = new ArrayList<>();
-    public static final ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
 
-    private static long windowHandle;
+    private static final ImGuiImplGl3 IMGUI_GL3 = new ImGuiImplGl3();
+
+    public static final ImGuiImplGlfw IMGUI_GLFW = new ImGuiImplGlfw();
+
+    private static final ConcurrentHashMultiset<Renderable> RENDERSTACK = ConcurrentHashMultiset.create();
 
     public static void onGlfwInit(long handle) {
         ImGui.createContext();
         final ImGuiIO io = ImGui.getIO();
-
-        io.setIniFilename(null);
-        io.addConfigFlags(ImGuiConfigFlags.NavEnableKeyboard | ImGuiConfigFlags.DockingEnable);
-        io.setConfigViewportsNoTaskBarIcon(true);
-
         final ImFontAtlas fontAtlas = io.getFonts();
-        final ImFontConfig fontConfig = new ImFontConfig();
-
-        fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesCyrillic());
 
         fontAtlas.addFontDefault();
+        io.setIniFilename(null);
 
-        fontConfig.setMergeMode(true);
-        fontConfig.setPixelSnapH(true);
-
-        fontConfig.destroy();
-
-        if (io.hasConfigFlags(ImGuiConfigFlags.ViewportsEnable)) {
-            final ImGuiStyle style = ImGui.getStyle();
-            style.setWindowRounding(0.0f);
-            style.setColor(ImGuiCol.WindowBg, ImGui.getColorU32(ImGuiCol.WindowBg, 1));
-        }
-
-        imGuiGlfw.init(handle,true);
-        imGuiGl3.init();
-        windowHandle = handle;
+        IMGUI_GLFW.init(handle, true);
+        IMGUI_GL3.init();
     }
 
     public static void onFrameRender() {
-        imGuiGlfw.newFrame();
+        IMGUI_GLFW.newFrame();
         ImGui.newFrame();
 
-        for (Renderable renderable: renderstack) {
-            MinecraftClient.getInstance().getProfiler().push("ImGui Render/"+renderable.getName());
+        RENDERSTACK.forEach(renderable -> {
+            MinecraftClient.getInstance().getProfiler()
+                    .push(String.format("Section [%s] start", renderable.getName()));
             renderable.getTheme().preRender();
             renderable.render();
             renderable.getTheme().postRender();
             MinecraftClient.getInstance().getProfiler().pop();
-        }
+        });
 
         ImGui.render();
-        endFrame(windowHandle);
+        endFrame();
     }
 
-    private static void endFrame(long windowPtr) {
-        imGuiGl3.renderDrawData(ImGui.getDrawData());
+    private static void endFrame() {
+        IMGUI_GL3.renderDrawData(ImGui.getDrawData());
 
         if (ImGui.getIO().hasConfigFlags(ImGuiConfigFlags.ViewportsEnable)) {
             final long backupWindowPtr = glfwGetCurrentContext();
@@ -81,13 +61,24 @@ public class ImGuiLoader {
         }
     }
 
-    public static Renderable pushRenderable(Renderable renderable) {
-        renderstack.add(renderable);
-        return renderable;
+    public static ConcurrentHashMultiset<Renderable> getRenderStack() {
+        return RENDERSTACK;
     }
 
-    public static Renderable pullRenderable(Renderable renderable) {
-        renderstack.remove(renderable);
-        return renderable;
+    public static void pushRenderable(Renderable renderable) {
+        RENDERSTACK.add(renderable);
     }
+
+    public static void pushRenderables(Renderable... renderables) {
+        RENDERSTACK.addAll(Arrays.asList(renderables));
+    }
+
+    public static void pullRenderable(Renderable renderable) {
+        RENDERSTACK.remove(renderable);
+    }
+
+    public static void pullRenderables(Renderable... renderables) {
+        RENDERSTACK.removeAll(Arrays.asList(renderables));
+    }
+
 }
