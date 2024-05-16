@@ -75,4 +75,8 @@ public class ScriptItemStack {
     public boolean isEnchantable() {
         return this.stack.isEnchantable();
     }
+
+    public String getId() {
+        return this.stack.getItem().getTranslationKey();
+    }
 }

@@ -9,10 +9,12 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import thebendy.cubecode.api.scripts.code.ScriptRayTrace;
 import thebendy.cubecode.api.scripts.code.ScriptVector;
 import thebendy.cubecode.api.scripts.code.ScriptWorld;
+import thebendy.cubecode.api.scripts.code.items.ScriptItemStack;
 
 public class ScriptEntity<T extends Entity> {
     protected T entity;
@@ -231,5 +233,30 @@ public class ScriptEntity<T extends Entity> {
                 entity -> true,
                 maxDistance * maxDistance
         ));
+    }
+
+    public String getUUID() {
+        return this.entity.getUuidAsString();
+    }
+
+    public String getType() {
+        return this.entity.getType().toString();
+    }
+
+    public ScriptItemStack getMainItemStack() {
+        return ScriptItemStack.create(((LivingEntity)this.entity).getMainHandStack());
+    }
+
+    public ScriptItemStack getOffItemStack() {
+        return ScriptItemStack.create(((LivingEntity)this.entity).getOffHandStack());
+    }
+
+    public ScriptVector getLook() {
+        float f1 = -((this.entity.getPitch()) * ((float)Math.PI / 180F));
+        float f2 = (this.entity.getHeadYaw() * ((float)Math.PI / 180F));
+        float f3 = -MathHelper.sin(f2);
+        float f4 = MathHelper.cos(f2);
+        float f6 = MathHelper.cos(f1);
+        return new ScriptVector(f3 * f6, this.entity.getRotationVector().y, f4 * f6);
     }
 }
