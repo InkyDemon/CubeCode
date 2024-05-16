@@ -7,6 +7,7 @@ import thebendy.cubecode.client.imgui.Renderable;
 import thebendy.cubecode.client.imgui.Theme;
 
 public class MainView implements Renderable {
+
     @Override
     public String getName() {
         return "Main";

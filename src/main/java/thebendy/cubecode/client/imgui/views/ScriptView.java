@@ -10,17 +10,17 @@ import thebendy.cubecode.client.imgui.Theme;
 
 public class ScriptView implements Renderable {
 
-    private static final TextEditor CODE_EDITOR = new TextEditor();
-    private static final ImBoolean CLOSE = new ImBoolean(true);
-    private static final TextEditorLanguageDefinition JAVA_SCRIPT = TextEditorLanguageDefinition.angelScript();
-    private static final String KEYWORD_PATTERN = "break|case|catch|const|continue|default|delete|do|else|false|finally|for|function|if|in|instanceof|let|new|null|return|switch|this|throw|try|true|typeof|var|while|with)";
-    private static final String NUMBER_PATTERN = "\\b\\d+(\\.\\d+)?\\b";
-    private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"|'([^'\\\\]|\\\\.)*'";
-    private static final String COMMENT_PATTERN = "//.*?$|/\\*(?:.|\n)*?\\*/";
+    private final TextEditor CODE_EDITOR = new TextEditor();
+    private final ImBoolean CLOSE = new ImBoolean(true);
+    private final TextEditorLanguageDefinition JAVA_SCRIPT = TextEditorLanguageDefinition.angelScript();
+    private final String KEYWORD_PATTERN = "break|case|catch|const|continue|default|delete|do|else|false|finally|for|function|if|in|instanceof|let|new|null|return|switch|this|throw|try|true|typeof|var|while|with)";
+    private final String NUMBER_PATTERN = "\\b\\d+(\\.\\d+)?\\b";
+    private final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"|'([^'\\\\]|\\\\.)*'";
+    private final String COMMENT_PATTERN = "//.*?$|/\\*(?:.|\n)*?\\*/";
 
     @Override
     public String getName() {
-        return "Script";
+        return this.getClass().getSimpleName();
     }
 
     @Override

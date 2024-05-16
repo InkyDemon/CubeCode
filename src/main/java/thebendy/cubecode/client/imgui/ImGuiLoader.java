@@ -39,7 +39,7 @@ public class ImGuiLoader {
 
         RENDERSTACK.forEach(renderable -> {
             MinecraftClient.getInstance().getProfiler()
-                    .push(String.format("Section [%s] start", renderable.getName()));
+                    .push(String.format("Section [%s]", renderable.getName()));
             renderable.getTheme().preRender();
             renderable.render();
             renderable.getTheme().postRender();
