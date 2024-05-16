@@ -18,4 +18,8 @@ public class ScriptFactory {
 
         return classes.substring(beginIndex);
     }
+
+    public ScriptVector vector(double x, double y, double z) {
+        return new ScriptVector(x, y, z);
+    }
 }

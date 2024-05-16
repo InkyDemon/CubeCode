@@ -3,13 +3,18 @@ package thebendy.cubecode.api.scripts.code.entities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import thebendy.cubecode.api.scripts.code.ScriptRayTrace;
 import thebendy.cubecode.api.scripts.code.ScriptVector;
 import thebendy.cubecode.api.scripts.code.ScriptWorld;
+import thebendy.cubecode.api.scripts.code.items.ScriptItemStack;
 
 public class ScriptEntity<T extends Entity> {
     protected T entity;
@@ -146,7 +151,112 @@ public class ScriptEntity<T extends Entity> {
         ((LivingEntity)this.entity).setMovementSpeed(movementSpeed);
     }
 
+    public ScriptVector getRotationVector() {
+        return new ScriptVector(this.entity.getRotationVector());
+    }
+
+    public float getHp() {
+        return ((LivingEntity)this.entity).getHealth();
+    }
+
+    public float getMaxHp() {
+        return ((LivingEntity)this.entity).getMaxHealth();
+    }
+
+    public int getArmor() {
+        return ((LivingEntity)this.entity).getArmor();
+    }
+
+    public void setSneaking(boolean sneaking) {
+        this.entity.setSneaking(sneaking);
+    }
+
+    public boolean isSneaking() {
+        return this.entity.isSneaking();
+    }
+
+    public void setSprinting(boolean sprinting) {
+        this.entity.setSprinting(sprinting);
+    }
+
+    public boolean isSprinting() {
+        return this.entity.isSprinting();
+    }
+
+    public boolean isTouchingWater() {
+        return this.entity.isTouchingWater();
+    }
+
+    public boolean isInLava() {
+        return this.entity.isInLava();
+    }
+
+    public boolean isBurning() {
+        return this.entity.getFireTicks() > 0;
+    }
+
+    public void setBurning(int ticks) {
+        if (ticks <= 0) {
+            this.entity.extinguish();
+        }
+        else {
+            this.entity.setFireTicks(ticks);
+        }
+    }
+
+    public boolean isOnGround() {
+        return this.entity.isOnGround();
+    }
+
     public void kill() {
         this.entity.kill();
+    }
+
+    public double getEyeHeight() {
+        return this.entity.getEyePos().y;
+    }
+
+    public ScriptRayTrace rayTraceBlock(double maxDistance, boolean includesFluids) {
+        return new ScriptRayTrace(this.entity.raycast(maxDistance, 0, includesFluids));
+    }
+
+    public ScriptRayTrace rayTraceEntity(double maxDistance) {
+        Vec3d eyePos = this.entity.getEyePos();
+        Vec3d lookDir = this.entity.getRotationVec(1);
+        Vec3d reach = lookDir.multiply(maxDistance);
+
+        return new ScriptRayTrace(ProjectileUtil.raycast(
+                this.entity,
+                eyePos,
+                eyePos.add(reach),
+                this.entity.getBoundingBox().stretch(reach).expand(1, 1, 1),
+                entity -> true,
+                maxDistance * maxDistance
+        ));
+    }
+
+    public String getUUID() {
+        return this.entity.getUuidAsString();
+    }
+
+    public String getType() {
+        return this.entity.getType().toString();
+    }
+
+    public ScriptItemStack getMainItemStack() {
+        return ScriptItemStack.create(((LivingEntity)this.entity).getMainHandStack());
+    }
+
+    public ScriptItemStack getOffItemStack() {
+        return ScriptItemStack.create(((LivingEntity)this.entity).getOffHandStack());
+    }
+
+    public ScriptVector getLook() {
+        float f1 = -((this.entity.getPitch()) * ((float)Math.PI / 180F));
+        float f2 = (this.entity.getHeadYaw() * ((float)Math.PI / 180F));
+        float f3 = -MathHelper.sin(f2);
+        float f4 = MathHelper.cos(f2);
+        float f6 = MathHelper.cos(f1);
+        return new ScriptVector(f3 * f6, this.entity.getRotationVector().y, f4 * f6);
     }
 }

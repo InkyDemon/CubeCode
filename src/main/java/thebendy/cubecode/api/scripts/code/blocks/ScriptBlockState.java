@@ -118,10 +118,8 @@ public class ScriptBlockState {
         }
     }
 
-    private Property getPropertyByName(String name) throws CubeCodeException {
-        Iterator<Property<?>> propertyIterator = this.blockState.getProperties().iterator();
-        while (propertyIterator.hasNext()) {
-            Property property = propertyIterator.next();
+    private Property<?> getPropertyByName(String name) throws CubeCodeException {
+        for (Property<?> property : this.blockState.getProperties()) {
             if (property.getName().equalsIgnoreCase(name)) {
                 return property;
             }

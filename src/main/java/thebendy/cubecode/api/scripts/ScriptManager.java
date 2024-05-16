@@ -38,9 +38,6 @@ public class ScriptManager {
         scripts = newScripts;
     }
 
-    public void executeScript(String scriptId, @Nullable Map<String, Object> properties) throws CubeCodeException {
-        scripts.get(scriptId).execute(scriptId, properties);
-    }
 
     public static void evalCode(String code, int line, String sourceName, @Nullable Map<String, Object> properties) throws CubeCodeException {
         Context runContext = Context.enter();
