@@ -24,6 +24,10 @@ public class ScriptView extends View {
     @Override
     public void init() {
         ImGui.setNextWindowSize(500, 400);
+        CODE_EDITOR.setPalette(JavaScriptDefinition.buildPallet());
+        CODE_EDITOR.setLanguageDefinition(JavaScriptDefinition.build());
+        CODE_EDITOR.setShowWhitespaces(false);
+        CODE_EDITOR.setTabSize(2);
     }
 
     @Override
@@ -32,10 +36,6 @@ public class ScriptView extends View {
             if (!CLOSE.get()) {
                 ImGuiLoader.pullRenderable(this);
             }
-
-            CODE_EDITOR.setLanguageDefinition(JavaScriptDefinition.build());
-            CODE_EDITOR.setShowWhitespaces(false);
-            CODE_EDITOR.setTabSize(2);
             CODE_EDITOR.render("Code editor");
         }
         ImGui.end();
