@@ -8,7 +8,6 @@ import thebendy.cubecode.client.imgui.View;
 import thebendy.cubecode.client.imgui.languages.JavaScriptDefinition;
 
 public class ScriptView extends View {
-
     private final TextEditor CODE_EDITOR = new TextEditor();
     private final ImBoolean CLOSE = new ImBoolean(true);
 
