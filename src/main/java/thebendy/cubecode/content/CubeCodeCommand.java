@@ -5,6 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.argument.MessageArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
 import thebendy.cubecode.CubeCode;
 import thebendy.cubecode.api.scripts.ScriptManager;
 import thebendy.cubecode.api.scripts.code.ScriptFactory;
@@ -38,7 +39,7 @@ public class CubeCodeCommand {
                     try {
                         CubeCode.scriptManager.executeScript(scriptId, properties);
                     } catch (Exception exception) {
-
+                        context.getSource().sendError(Text.of(exception.getMessage()));
                     }
 
                     return Command.SINGLE_SUCCESS;
@@ -54,7 +55,7 @@ public class CubeCodeCommand {
                     try {
                         ScriptManager.evalCode(code, 1, "eval", properties);
                     } catch (Exception exception) {
-
+                        context.getSource().sendError(Text.of(exception.getMessage()));
                     }
 
                     return Command.SINGLE_SUCCESS;
