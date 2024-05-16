@@ -3,34 +3,15 @@ package thebendy.cubecode.client.imgui.views;
 import imgui.ImGui;
 import imgui.flag.ImGuiWindowFlags;
 import thebendy.cubecode.client.imgui.ImGuiLoader;
-import thebendy.cubecode.client.imgui.Renderable;
+import thebendy.cubecode.client.imgui.View;
 import thebendy.cubecode.client.imgui.Theme;
+import thebendy.cubecode.client.imgui.themes.DefaultTheme;
 
-public class MainView implements Renderable {
-
-    @Override
-    public String getName() {
-        return "Main";
-    }
-
-    @Override
-    public Theme getTheme() {
-        return new Theme() {
-            @Override
-            public void preRender() {
-
-            }
-
-            @Override
-            public void postRender() {
-                //code...
-            }
-        };
-    }
+public class MainView extends View {
 
     @Override
     public void render() {
-        ImGui.setNextWindowSize(ImGui.getIO().getDisplaySizeX(), 0);
+        ImGui.setNextWindowSize(ImGui.getIO().getDisplaySizeX(), -10);
         ImGui.setNextWindowPos(0, 0);
 
         if (ImGui.begin(getName(), ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.MenuBar)) {

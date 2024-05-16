@@ -19,7 +19,7 @@ public class ImGuiLoader {
 
     public static final ImGuiImplGlfw IMGUI_GLFW = new ImGuiImplGlfw();
 
-    private static final ConcurrentHashMultiset<Renderable> RENDERSTACK = ConcurrentHashMultiset.create();
+    private static final ConcurrentHashMultiset<View> RENDERSTACK = ConcurrentHashMultiset.create();
 
     public static void onGlfwInit(long handle) {
         ImGui.createContext();
@@ -41,7 +41,7 @@ public class ImGuiLoader {
             MinecraftClient.getInstance().getProfiler()
                     .push(String.format("Section [%s]", renderable.getName()));
             renderable.getTheme().preRender();
-            renderable.render();
+            renderable.loop();
             renderable.getTheme().postRender();
             MinecraftClient.getInstance().getProfiler().pop();
         });
@@ -61,24 +61,24 @@ public class ImGuiLoader {
         }
     }
 
-    public static ConcurrentHashMultiset<Renderable> getRenderStack() {
+    public static ConcurrentHashMultiset<View> getRenderStack() {
         return RENDERSTACK;
     }
 
-    public static void pushRenderable(Renderable renderable) {
-        RENDERSTACK.add(renderable);
+    public static void pushRenderable(View view) {
+        RENDERSTACK.add(view);
     }
 
-    public static void pushRenderables(Renderable... renderables) {
-        RENDERSTACK.addAll(Arrays.asList(renderables));
+    public static void pushRenderables(View... views) {
+        RENDERSTACK.addAll(Arrays.asList(views));
     }
 
-    public static void pullRenderable(Renderable renderable) {
-        RENDERSTACK.remove(renderable);
+    public static void pullRenderable(View view) {
+        RENDERSTACK.remove(view);
     }
 
-    public static void pullRenderables(Renderable... renderables) {
-        RENDERSTACK.removeAll(Arrays.asList(renderables));
+    public static void pullRenderables(View... views) {
+        RENDERSTACK.removeAll(Arrays.asList(views));
     }
 
 }
