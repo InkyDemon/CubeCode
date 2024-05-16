@@ -10,8 +10,8 @@ public class MainView extends View {
     public void render() {
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("Windows")) {
-                 if (ImGui.menuItem("ScriptView")) {
-                     ImGuiLoader.pushRenderable(new ScriptView());
+                 if (ImGui.menuItem("Scripts")) {
+                     ImGuiLoader.addRender(new ScriptsView());
                  }
                  ImGui.endMenu();
             }

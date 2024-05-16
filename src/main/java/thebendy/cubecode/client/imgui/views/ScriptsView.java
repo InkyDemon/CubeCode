@@ -7,7 +7,7 @@ import thebendy.cubecode.client.imgui.ImGuiLoader;
 import thebendy.cubecode.client.imgui.View;
 import thebendy.cubecode.client.imgui.languages.JavaScriptDefinition;
 
-public class ScriptView extends View {
+public class ScriptsView extends View {
     private final TextEditor CODE_EDITOR = new TextEditor();
     private final ImBoolean CLOSE = new ImBoolean(true);
 
@@ -29,7 +29,7 @@ public class ScriptView extends View {
     public void render() {
         if (ImGui.begin(getName(), CLOSE)) {
             if (!CLOSE.get()) {
-                ImGuiLoader.pullRenderable(this);
+                ImGuiLoader.removeRender(this);
             }
             CODE_EDITOR.render("Code editor");
         }

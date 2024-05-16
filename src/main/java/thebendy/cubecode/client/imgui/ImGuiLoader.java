@@ -8,7 +8,6 @@ import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import net.minecraft.client.MinecraftClient;
 
-import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -37,20 +36,20 @@ public class ImGuiLoader {
         IMGUI_GLFW.newFrame();
         ImGui.newFrame();
 
-        RENDERSTACK.forEach(renderable -> {
+        RENDERSTACK.forEach(view -> {
             MinecraftClient.getInstance().getProfiler()
-                    .push(String.format("Section [%s]", renderable.getName()));
-            renderable.getTheme().preRender();
-            renderable.loop();
-            renderable.getTheme().postRender();
+                    .push(String.format("Section [%s]", view.getName()));
+            view.getTheme().preRender();
+            view.loop();
+            view.getTheme().postRender();
             MinecraftClient.getInstance().getProfiler().pop();
         });
 
         ImGui.render();
-        endFrame();
+        endFrameRender();
     }
 
-    private static void endFrame() {
+    private static void endFrameRender() {
         IMGUI_GL3.renderDrawData(ImGui.getDrawData());
 
         if (ImGui.getIO().hasConfigFlags(ImGuiConfigFlags.ViewportsEnable)) {
@@ -61,24 +60,15 @@ public class ImGuiLoader {
         }
     }
 
-    public static ConcurrentLinkedQueue<View> getRenderStack() {
-        return RENDERSTACK;
-    }
-
-    public static void pushRenderable(View view) {
+    public static void addRender(View view) {
         RENDERSTACK.add(view);
     }
 
-    public static void pushRenderables(View... views) {
-        RENDERSTACK.addAll(Arrays.asList(views));
-    }
-
-    public static void pullRenderable(View view) {
+    public static void removeRender(View view) {
         RENDERSTACK.remove(view);
     }
 
-    public static void pullRenderables(View... views) {
-        RENDERSTACK.removeAll(Arrays.asList(views));
+    public static void clearRenderStack() {
+        RENDERSTACK.clear();
     }
-
 }
