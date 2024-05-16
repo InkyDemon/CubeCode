@@ -1,7 +1,7 @@
 package thebendy.cubecode.client.imgui.views;
 
 import imgui.ImGui;
-import imgui.internal.flag.ImGuiDockNodeFlags;
+import imgui.flag.ImGuiDockNodeFlags;
 import thebendy.cubecode.client.imgui.ImGuiLoader;
 import thebendy.cubecode.client.imgui.View;
 
@@ -10,14 +10,13 @@ public class MainView extends View {
     public void render() {
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("Windows")) {
-                 if (ImGui.menuItem("Add ScriptView")) {
+                 if (ImGui.menuItem("ScriptView")) {
                      ImGuiLoader.pushRenderable(new ScriptView());
                  }
                  ImGui.endMenu();
             }
+            ImGui.endMainMenuBar();
         }
-        ImGui.endMainMenuBar();
-
-        ImGui.dockSpaceOverViewport(ImGui.getWindowViewport(), ImGuiDockNodeFlags.PassthruCentralNode | ImGuiDockNodeFlags.NoCentralNode);
+        ImGui.dockSpaceOverViewport(ImGui.getWindowViewport(), ImGuiDockNodeFlags.NoCentralNode | ImGuiDockNodeFlags.PassthruCentralNode);
     }
 }
