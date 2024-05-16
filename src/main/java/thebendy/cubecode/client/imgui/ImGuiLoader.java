@@ -30,7 +30,7 @@ public class ImGuiLoader {
 
         try (InputStream inputStream = ImGuiLoader.class.getClassLoader().getResourceAsStream("imgui/fonts/default.ttf")) {
             byte[] bytes = inputStream.readAllBytes();
-            MAIN_FONT = fontAtlas.addFontFromMemoryTTF(bytes, 14);
+            MAIN_FONT = fontAtlas.addFontFromMemoryTTF(bytes, 16);
         } catch (Exception exception) {
             CubeCode.LOGGER.error(exception.getMessage());
         }
@@ -46,21 +46,21 @@ public class ImGuiLoader {
         ImGui.newFrame();
 
         ImGui.pushFont(MAIN_FONT);
-        RENDERSTACK.forEach(renderable -> {
+        RENDERSTACK.forEach(view -> {
             MinecraftClient.getInstance().getProfiler()
-                    .push(String.format("Section [%s]", renderable.getName()));
-            renderable.getTheme().preRender();
-            renderable.loop();
-            renderable.getTheme().postRender();
+                    .push(String.format("Section [%s]", view.getName()));
+            view.getTheme().preRender();
+            view.loop();
+            view.getTheme().postRender();
             MinecraftClient.getInstance().getProfiler().pop();
         });
         ImGui.popFont();
 
         ImGui.render();
-        endFrame();
+        endFrameRender();
     }
 
-    private static void endFrame() {
+    private static void endFrameRender() {
         IMGUI_GL3.renderDrawData(ImGui.getDrawData());
 
         if (ImGui.getIO().hasConfigFlags(ImGuiConfigFlags.ViewportsEnable)) {
@@ -75,20 +75,23 @@ public class ImGuiLoader {
         return RENDERSTACK;
     }
 
-    public static void pushRenderable(View view) {
+    public static void pushView(View view) {
         RENDERSTACK.add(view);
     }
 
-    public static void pushRenderables(View... views) {
+    public static void pushViews(View... views) {
         RENDERSTACK.addAll(Arrays.asList(views));
     }
 
-    public static void pullRenderable(View view) {
+    public static void removeView(View view) {
         RENDERSTACK.remove(view);
     }
 
-    public static void pullRenderables(View... views) {
+    public static void removeViews(View... views) {
         RENDERSTACK.removeAll(Arrays.asList(views));
     }
 
+    public static void clearViews() {
+        RENDERSTACK.clear();
+    }
 }

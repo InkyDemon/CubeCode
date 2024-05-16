@@ -29,11 +29,10 @@ public class ScriptsView extends View {
     public void render() {
         if (ImGui.begin(getName(), CLOSE)) {
             if (!CLOSE.get()) {
-                ImGuiLoader.removeRender(this);
+                ImGuiLoader.removeView(this);
             }
             CODE_EDITOR.render("Code editor");
         }
         ImGui.end();
     }
-
 }

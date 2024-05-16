@@ -12,7 +12,7 @@ public class DashboardScreen extends Screen {
     public DashboardScreen() {
         super(Text.of("Dashboard"));
         ImGui.getIO().addConfigFlags(ImGuiConfigFlags.DockingEnable);
-        ImGuiLoader.addRender(new MainView());
+        ImGuiLoader.pushView(new MainView());
     }
 
     @Override
@@ -24,6 +24,6 @@ public class DashboardScreen extends Screen {
     public void close() {
         super.close();
         ImGui.getIO().clearInputKeys();
-        ImGuiLoader.clearRenderStack();
+        ImGuiLoader.clearViews();
     }
 }

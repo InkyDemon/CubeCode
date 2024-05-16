@@ -11,7 +11,7 @@ public class MainView extends View {
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("Windows")) {
                  if (ImGui.menuItem("Scripts")) {
-                     ImGuiLoader.addRender(new ScriptsView());
+                     ImGuiLoader.pushView(new ScriptsView());
                  }
                  ImGui.endMenu();
             }

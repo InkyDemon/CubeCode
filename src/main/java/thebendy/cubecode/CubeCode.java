@@ -28,7 +28,7 @@ public class CubeCode implements ModInitializer {
     @Override
     public void onInitialize() {
         CubeCodeKeyBindings.init();
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> CubeCodeCommand.init(dispatcher));
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> new CubeCodeCommand(dispatcher));
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 
