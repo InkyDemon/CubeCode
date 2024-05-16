@@ -115,7 +115,7 @@ public class ScriptEntity<T extends Entity> {
     }
 
     public String getFacing() {
-        return this.entity.getFacing().getName();
+        return this.entity.getHorizontalFacing().toString();
     }
 
     public float getWidth() {

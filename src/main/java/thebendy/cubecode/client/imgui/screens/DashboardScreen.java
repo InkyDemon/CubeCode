@@ -9,7 +9,6 @@ import thebendy.cubecode.client.imgui.ImGuiLoader;
 import thebendy.cubecode.client.imgui.View;
 
 public class DashboardScreen extends Screen {
-
     public DashboardScreen() {
         super(Text.of("Dashboard"));
         ImGui.getIO().addConfigFlags(ImGuiConfigFlags.DockingEnable);
@@ -22,5 +21,6 @@ public class DashboardScreen extends Screen {
         ImGui.getIO().clearInputKeys();
         ImGuiLoader.pullRenderables(ImGuiLoader.getRenderStack().toArray(new View[]{}));
     }
+
 
 }
