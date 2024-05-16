@@ -3,7 +3,6 @@ package thebendy.cubecode.api.scripts;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.Nullable;
 import org.mozilla.javascript.*;
-import org.mozilla.javascript.tools.ToolErrorReporter;
 import thebendy.cubecode.utils.CubeCodeException;
 
 import java.io.File;
@@ -38,6 +37,9 @@ public class ScriptManager {
         scripts = newScripts;
     }
 
+    public void executeScript(String scriptId, @Nullable Map<String, Object> properties) throws CubeCodeException {
+        scripts.get(scriptId).execute(scriptId, properties);
+    }
 
     public static void evalCode(String code, int line, String sourceName, @Nullable Map<String, Object> properties) throws CubeCodeException {
         Context runContext = Context.enter();
@@ -61,5 +63,9 @@ public class ScriptManager {
         }
 
         runContext.close();
+    }
+
+    public Map<String, Script> getScripts() {
+        return scripts;
     }
 }

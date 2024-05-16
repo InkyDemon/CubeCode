@@ -1,12 +1,9 @@
 package thebendy.cubecode.api.scripts.code.items;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-
-import java.util.ArrayList;
-import java.util.List;
+import thebendy.cubecode.api.scripts.code.nbt.ScriptNbtList;
 
 public class ScriptItemStack {
     public static final ScriptItemStack EMPTY = new ScriptItemStack(ItemStack.EMPTY);
@@ -62,14 +59,8 @@ public class ScriptItemStack {
         this.stack.addEnchantment(Registries.ENCHANTMENT.get(new Identifier(enchantment)), level);
     }
 
-    public List<Enchantment> getEnchantments() {
-        List<Enchantment> enchantments = new ArrayList<>();
-
-        this.stack.getEnchantments().getEnchantments().forEach(enchantmentRegistry -> {
-            enchantments.add(enchantmentRegistry.value());
-        });
-
-        return enchantments;
+    public ScriptNbtList getEnchantments() {
+        return new ScriptNbtList(this.stack.getEnchantments());
     }
 
     public boolean isEnchantable() {
