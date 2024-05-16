@@ -1,6 +1,5 @@
 package thebendy.cubecode.client.imgui;
 
-import com.google.common.collect.ConcurrentHashMultiset;
 import imgui.ImFontAtlas;
 import imgui.ImGui;
 import imgui.ImGuiIO;
@@ -10,6 +9,7 @@ import imgui.glfw.ImGuiImplGlfw;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -19,7 +19,7 @@ public class ImGuiLoader {
 
     public static final ImGuiImplGlfw IMGUI_GLFW = new ImGuiImplGlfw();
 
-    private static final ConcurrentHashMultiset<View> RENDERSTACK = ConcurrentHashMultiset.create();
+    private static final ConcurrentLinkedQueue<View> RENDERSTACK = new ConcurrentLinkedQueue<>();
 
     public static void onGlfwInit(long handle) {
         ImGui.createContext();
@@ -61,7 +61,7 @@ public class ImGuiLoader {
         }
     }
 
-    public static ConcurrentHashMultiset<View> getRenderStack() {
+    public static ConcurrentLinkedQueue<View> getRenderStack() {
         return RENDERSTACK;
     }
 

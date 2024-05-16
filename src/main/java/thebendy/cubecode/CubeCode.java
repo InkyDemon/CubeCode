@@ -28,18 +28,15 @@ public class CubeCode implements ModInitializer {
     @Override
     public void onInitialize() {
         CubeCodeKeyBindings.init();
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> new CubeCodeCommand(dispatcher));
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> CubeCodeCommand.init(dispatcher));
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 
             File worldDirectory = server.getSavePath(WorldSavePath.ROOT).getParent().toFile();
             File cubeCodeDirectory = new File(worldDirectory, MOD_ID);
 
-            boolean flag = cubeCodeDirectory.mkdirs();
-
-            if (flag) {
-                LOGGER.info(String.format("#### Creating a script directory %s for world. ####", MOD_ID));
+            if (cubeCodeDirectory.mkdirs()) {
+                LOGGER.info(String.format("#### Creating a mod directory %s for world. ####", MOD_ID));
             }
 
             scriptManager = new ScriptManager(new File(cubeCodeDirectory, "scripts"));

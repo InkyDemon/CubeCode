@@ -1,12 +1,19 @@
 package thebendy.cubecode.api.scripts.code;
 
+import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldProperties;
+import thebendy.cubecode.CubeCode;
 import thebendy.cubecode.api.scripts.code.cubecode.CubeCodeStates;
 import thebendy.cubecode.api.scripts.code.entities.ScriptPlayer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ScriptServer {
     private MinecraftServer server;
@@ -20,6 +27,15 @@ public class ScriptServer {
         this.server.getPlayerManager().getPlayerList().forEach((player) -> players.add((ScriptPlayer) ScriptPlayer.create(player)));
 
         return players;
+    }
+
+    /**
+     *
+     * overworld or nether or end
+     *
+     */
+    public ScriptWorld getWorld(String worldName) {
+        return new ScriptWorld(this.server.getWorld(worldName.equals("overworld") ? World.OVERWORLD : worldName.equals("nether") ? World.NETHER : World.END));
     }
 
     public int getMaxPlayerCount() {
@@ -56,5 +72,13 @@ public class ScriptServer {
 
     public CubeCodeStates getStates() {
         return new CubeCodeStates(this.server);
+    }
+
+    public void executeScript(String scriptName) throws Exception {
+        Map<String, Object> properties = new HashMap<>();
+
+        properties.put("Server", this);
+
+        CubeCode.scriptManager.executeScript(scriptName, properties);
     }
 }

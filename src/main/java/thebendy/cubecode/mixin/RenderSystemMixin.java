@@ -12,7 +12,7 @@ import thebendy.cubecode.client.imgui.ImGuiLoader;
 public abstract class RenderSystemMixin {
 
     @Inject(method = "flipFrame", at = @At("HEAD"))
-    private static void runTickTail(CallbackInfo ci) {
+    private static void injectFrameRender(CallbackInfo ci) {
         MinecraftClient.getInstance().getProfiler().push("Imgui start");
         ImGuiLoader.onFrameRender();
         MinecraftClient.getInstance().getProfiler().pop();
