@@ -3,25 +3,31 @@ package thebendy.cubecode.client.imgui.languages;
 import imgui.extension.texteditor.TextEditorLanguageDefinition;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class JavaScriptDefinition {
 
     public static TextEditorLanguageDefinition build() {
         String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"|'([^'\\\\]|\\\\.)*'";
+        String SINGLE_COMMENT_PATTERN = "(//(?!\\bTODO\\b).*)";
         String NUMBER_PATTERN = "\\b\\d+(\\.\\d+)?\\b";
+        String TODO_PATTERN = "(//TODO.*)";
 
-        String[] keywords = new String[]{
+        String[] cubecodeKeywords = new String[]{
+                "Player" // TODO LAMA
+        };
+
+        String[] syntaxKeywords = new String[]{
                 "break", "continue", "switch", "case", "default", "try",
                 "catch", "delete", "do", "while", "else", "finally", "if",
                 "else", "for", "each", "in", "instanceof",
-                "new", "throw", "typeof", "with", "yield", "return"
-        };
-
-        String[] secondaryKeywords = new String[]{
+                "new", "throw", "typeof", "with", "yield", "return",
+                // TODO maybe раздельно ?
                 "const", "function", "var", "let", "prototype"
         };
 
-        String[] specials = new String[]{
+
+        String[] classKeywords = new String[]{
                 "this", "arguments"
         };
 
@@ -31,12 +37,19 @@ public class JavaScriptDefinition {
 
         HashMap<String, Integer> regex = new HashMap<>();
 
-        regex.put(STRING_PATTERN, 3);
+        // Default
         regex.put(NUMBER_PATTERN, 2);
-        regex.put(collectRegex(keywords), 4);
-        regex.put(collectRegex(secondaryKeywords), 4);
-        regex.put(collectRegex(specials), 1);
+        regex.put(STRING_PATTERN, 3);
+        regex.put(TODO_PATTERN, 3);
+        regex.put(SINGLE_COMMENT_PATTERN, 10);
+        // Default
+
+        // CubeCode
+        regex.put(collectRegex(classKeywords), 1);
         regex.put(collectRegex(typeKeywords), 2);
+        regex.put(collectRegex(syntaxKeywords), 4);
+        regex.put(collectRegexVariable(cubecodeKeywords), 5);
+        // CubeCode
 
         TextEditorLanguageDefinition base = new TextEditorLanguageDefinition();
 
@@ -44,7 +57,6 @@ public class JavaScriptDefinition {
         base.setTokenRegexStrings(regex);
         base.setCommentStart("/*");
         base.setCommentEnd("*/");
-        base.setSingleLineComment("//");
         return base;
     }
 
@@ -52,41 +64,52 @@ public class JavaScriptDefinition {
         StringBuilder builder = new StringBuilder();
         builder.append("\\b(");
         for (String object : objects) {
-            builder.append(object + "|");
+            builder.append(object).append("|");
         }
         builder.replace(builder.length() - 1, builder.length(), "");
         builder.append(")\\b");
         return builder.toString();
     }
 
-    private static int c(int r, int g, int b, int a) {
+    private static String collectRegexVariable(String[] objects) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("\\b(?:");
+        for (String object : objects) {
+            builder.append(object).append("|");
+        }
+        builder.setLength(builder.length() - 1);
+        builder.append(")(?=\\.)");
+        return builder.toString();
+    }
+
+    private static int rgbaToImguiColor(int r, int g, int b, int a) {
         return (a << 24) | (b << 16) | (g << 8) | r;
     }
 
     public static int[] buildPallet() {
         return new int[]{
-                /* 0  Default code */                     c(248, 248, 242, 255),
-                /* 1  Keyword (custom) */                 c(180, 120, 40, 255),
-                /* 2  Number */                           c(255, 0, 255, 255),
-                /* 3  String */                           c(230, 219, 116, 255),
-                /* 4  Char literal (custom) */            c(255,143,128, 220),
-                /* 5  Punctuation */                      -1,
-                /* 6  Preprocessor */                     -12550016,
-                /* 7  Identifier */                       -5592406,
-                /* 8  Known identifier */                 -6568371,
-                /* 9  Preproc identifier */               -4177760,
-                /* 10 Comment (single line) */           c(180, 180, 180, 100),
-                /* 11 Comment (multi line) */            c(166, 226, 46, 200),
-                /* 12 Background */                      c(39, 40, 34, 200),
-                /* 13 Cursor */                          -2039584,
-                /* 14 Selection */                       -2136973280,
-                /* 15 ErrorMarker */                     -2147475201,
-                /* 16 ControlCharacter */                1089503232,
-                /* 17 Breakpoint */                      -9408512,
-                /* 18 Line number */                     c(60, 60, 60, 220),
-                /* 19 Current line fill */               c(80, 80, 80, 220),
-                /* 20 Current line fill (inactive) */    c(100, 100, 100, 220),
-                /* 21 Current line edge */               c(150, 150, 150, 220),
+                /* + 0  Default code */                    rgbaToImguiColor(248, 248, 242, 255),
+                /* - 1  Keyword @TODO */                   rgbaToImguiColor(166, 226, 46, 255),
+                /* + 2  Number */                          rgbaToImguiColor(174, 129, 255, 255),
+                /* + 3  String */                          rgbaToImguiColor(230, 219, 116, 255),
+                /* - 4  Char literal @TODO */              rgbaToImguiColor(255, 143, 128, 220),
+                /* - 5  CubeCode Keywords */               rgbaToImguiColor(101, 44, 199, 255),
+                /* - 6  Preprocessor @TODO */              rgbaToImguiColor(255, 0, 0, 255),
+                /* - 7  Identifier @TODO */                rgbaToImguiColor(0, 255, 0, 255),
+                /* - 8  Known identifier @TODO */          rgbaToImguiColor(0, 0, 255, 255),
+                /* - 9  Preproc identifier @TODO */        rgbaToImguiColor(255, 0, 0, 255),
+                /* + 10 Comment (single line) */           rgbaToImguiColor(180, 180, 180, 100),
+                /* + 11 Comment (multi line) */            rgbaToImguiColor(166, 226, 46, 200),
+                /* + 12 Background */                      rgbaToImguiColor(39, 40, 34, 150),
+                /* + 13 Cursor */                          rgbaToImguiColor(255, 255, 255, 255),
+                /* + 14 Selection */                       rgbaToImguiColor(108, 153, 255, 80),
+                /* - 15 ErrorMarker */                     rgbaToImguiColor(255, 0, 0, 255),
+                /* - 16 ControlCharacter @TODO */          rgbaToImguiColor(255, 0, 0, 255),
+                /* + 17 Breakpoint number */               rgbaToImguiColor(80, 80, 80, 200),
+                /* + 18 Line number */                     rgbaToImguiColor(0, 0, 0, 30),
+                /* + 19 Current line fill */               rgbaToImguiColor(255, 255, 255, 50),
+                /* + 20 Current line fill (inactive) */    rgbaToImguiColor(255, 255, 255, 10),
+                /* + 21 Current line edge */               rgbaToImguiColor(255, 255, 255, 50),
         };
     }
 
