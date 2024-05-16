@@ -13,11 +13,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import thebendy.cubecode.client.imgui.ImGuiLoader;
 
 @Mixin(Window.class)
-public abstract class GLFWInitMixin {
+public abstract class WindowMixin {
+
     @Shadow @Final private long handle;
 
-    @Inject(at = @At("TAIL"),method = "<init>",remap = false)
-    private void onGLFWInit(WindowEventHandler eventHandler, MonitorTracker monitorTracker, WindowSettings settings, String videoMode, String title, CallbackInfo ci){
+    @Inject(method = "<init>", at = @At("TAIL"), remap = false)
+    private void onWindowInit(WindowEventHandler eventHandler, MonitorTracker monitorTracker, WindowSettings settings, String videoMode, String title, CallbackInfo ci){
         ImGuiLoader.onGlfwInit(handle);
     }
+
 }

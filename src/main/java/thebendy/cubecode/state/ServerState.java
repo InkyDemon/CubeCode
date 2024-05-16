@@ -14,23 +14,11 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class ServerState extends PersistentState {
+
     public NbtCompound values = new NbtCompound();
     public HashMap<UUID, PlayerState> players = new HashMap<>();
 
-    @Override
-    public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        NbtCompound playersNbtCompound = new NbtCompound();
-        players.forEach((UUID, playerSate) -> {
-            playersNbtCompound.put(String.valueOf(UUID), playerSate.getValues());
-        });
-
-        nbt.put("players", playersNbtCompound);
-        nbt.put("states", this.values);
-
-        return nbt;
-    }
-
-    public static ServerState createFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+    public static ServerState createFromNbt(NbtCompound tag) {
         ServerState serverState = new ServerState();
 
         NbtCompound statesTag = tag.getCompound("states");
@@ -73,4 +61,18 @@ public class ServerState extends PersistentState {
 
         return playerState;
     }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt) {
+        NbtCompound playersNbtCompound = new NbtCompound();
+        players.forEach((UUID, playerSate) -> {
+            playersNbtCompound.put(String.valueOf(UUID), playerSate.getValues());
+        });
+
+        nbt.put("players", playersNbtCompound);
+        nbt.put("states", this.values);
+
+        return nbt;
+    }
+
 }
