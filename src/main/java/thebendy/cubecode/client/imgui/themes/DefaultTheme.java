@@ -1,6 +1,6 @@
 package thebendy.cubecode.client.imgui.themes;
 
-import thebendy.cubecode.client.imgui.Theme;
+import thebendy.cubecode.client.imgui.basic.Theme;
 
 public class DefaultTheme implements Theme {
 

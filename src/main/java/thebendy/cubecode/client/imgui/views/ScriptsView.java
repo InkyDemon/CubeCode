@@ -3,8 +3,8 @@ package thebendy.cubecode.client.imgui.views;
 import imgui.ImGui;
 import imgui.extension.texteditor.TextEditor;
 import imgui.type.ImBoolean;
-import thebendy.cubecode.client.imgui.ImGuiLoader;
-import thebendy.cubecode.client.imgui.View;
+import thebendy.cubecode.client.imgui.basic.ImGuiLoader;
+import thebendy.cubecode.client.imgui.basic.View;
 import thebendy.cubecode.client.imgui.languages.JavaScriptDefinition;
 
 public class ScriptsView extends View {

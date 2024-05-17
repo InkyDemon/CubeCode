@@ -1,4 +1,4 @@
-package thebendy.cubecode.client.imgui;
+package thebendy.cubecode.client.imgui.basic;
 
 import imgui.*;
 import imgui.flag.ImGuiConfigFlags;

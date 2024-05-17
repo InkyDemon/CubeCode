@@ -11,7 +11,9 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": ["thebendy.cubecode.CubeCode"],
-		"client": ["thebendy.cubecode.client.CubeCodeClient"]
+		"client": [
+			"thebendy.cubecode.CubeCodeClient"
+		]
 	},
 	"mixins": ["cubecode.mixins.json"],
 

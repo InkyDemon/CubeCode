@@ -16,6 +16,9 @@ dependencies {
 	include implementation("io.github.spair:imgui-java-binding:$imgui_version")
 	include implementation("io.github.spair:imgui-java-lwjgl3:$imgui_version")
 	include implementation("io.github.spair:imgui-java-natives-windows:$imgui_version")
+
+	include implementation("io.github.bonede:tree-sitter:0.22.6")
+	include implementation("io.github.bonede:tree-sitter-javascript:0.21.2")
 }
 
 processResources {

@@ -2,8 +2,8 @@ package thebendy.cubecode.client.imgui.views;
 
 import imgui.ImGui;
 import imgui.flag.ImGuiDockNodeFlags;
-import thebendy.cubecode.client.imgui.ImGuiLoader;
-import thebendy.cubecode.client.imgui.View;
+import thebendy.cubecode.client.imgui.basic.ImGuiLoader;
+import thebendy.cubecode.client.imgui.basic.View;
 
 public class MainView extends View {
     @Override
@@ -13,6 +13,9 @@ public class MainView extends View {
                  if (ImGui.menuItem("Scripts")) {
                      ImGuiLoader.pushView(new ScriptsView());
                  }
+                if (ImGui.menuItem("CodeEditor")) {
+                    ImGuiLoader.pushView(new CodeEditorView());
+                }
                  ImGui.endMenu();
             }
             ImGui.endMainMenuBar();

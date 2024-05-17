@@ -3,7 +3,6 @@ package thebendy.cubecode.client.imgui.languages;
 import imgui.extension.texteditor.TextEditorLanguageDefinition;
 
 import java.util.HashMap;
-import java.util.regex.Pattern;
 
 public class JavaScriptDefinition {
 
@@ -12,9 +11,10 @@ public class JavaScriptDefinition {
         String SINGLE_COMMENT_PATTERN = "(//(?!\\bTODO\\b).*)";
         String NUMBER_PATTERN = "\\b\\d+(\\.\\d+)?\\b";
         String TODO_PATTERN = "(//TODO.*)";
+        String PUNCTUATION_PATTERN = "[\\[\\]\\{\\}\\!\\%\\^\\&\\*\\(\\)\\-\\+\\=\\~\\|\\<\\>\\?\\/\\;\\,\\.]";
 
         String[] cubecodeKeywords = new String[]{
-                "Player" // TODO LAMA
+                "Player", "World", "API" // TODO LAMA
         };
 
         String[] syntaxKeywords = new String[]{
@@ -23,11 +23,8 @@ public class JavaScriptDefinition {
                 "else", "for", "each", "in", "instanceof",
                 "new", "throw", "typeof", "with", "yield", "return",
                 // TODO maybe раздельно ?
-                "const", "function", "var", "let", "prototype"
-        };
-
-
-        String[] classKeywords = new String[]{
+                "const", "function", "var", "let", "prototype",
+                // TODO maybe раздельно ?
                 "this", "arguments"
         };
 
@@ -38,6 +35,7 @@ public class JavaScriptDefinition {
         HashMap<String, Integer> regex = new HashMap<>();
 
         // Default
+        regex.put(PUNCTUATION_PATTERN, 1);
         regex.put(NUMBER_PATTERN, 2);
         regex.put(STRING_PATTERN, 3);
         regex.put(TODO_PATTERN, 3);
@@ -45,7 +43,6 @@ public class JavaScriptDefinition {
         // Default
 
         // CubeCode
-        regex.put(collectRegex(classKeywords), 1);
         regex.put(collectRegex(typeKeywords), 2);
         regex.put(collectRegex(syntaxKeywords), 4);
         regex.put(collectRegexVariable(cubecodeKeywords), 5);
@@ -62,7 +59,7 @@ public class JavaScriptDefinition {
 
     private static String collectRegex(String[] objects) {
         StringBuilder builder = new StringBuilder();
-        builder.append("\\b(");
+        builder.append("([\\s]|^)(");
         for (String object : objects) {
             builder.append(object).append("|");
         }
@@ -73,7 +70,7 @@ public class JavaScriptDefinition {
 
     private static String collectRegexVariable(String[] objects) {
         StringBuilder builder = new StringBuilder();
-        builder.append("\\b(?:");
+        builder.append("([\\s]|^)(");
         for (String object : objects) {
             builder.append(object).append("|");
         }
@@ -89,11 +86,11 @@ public class JavaScriptDefinition {
     public static int[] buildPallet() {
         return new int[]{
                 /* + 0  Default code */                    rgbaToImguiColor(248, 248, 242, 255),
-                /* - 1  Keyword @TODO */                   rgbaToImguiColor(166, 226, 46, 255),
+                /* - 1  Punctuation @TODO */               rgbaToImguiColor(200, 200, 200, 255),
                 /* + 2  Number */                          rgbaToImguiColor(174, 129, 255, 255),
                 /* + 3  String */                          rgbaToImguiColor(230, 219, 116, 255),
                 /* - 4  Char literal @TODO */              rgbaToImguiColor(255, 143, 128, 220),
-                /* - 5  CubeCode Keywords */               rgbaToImguiColor(101, 44, 199, 255),
+                /* - 5  CubeCode Keywords */               rgbaToImguiColor(106, 90, 205, 255),
                 /* - 6  Preprocessor @TODO */              rgbaToImguiColor(255, 0, 0, 255),
                 /* - 7  Identifier @TODO */                rgbaToImguiColor(0, 255, 0, 255),
                 /* - 8  Known identifier @TODO */          rgbaToImguiColor(0, 0, 255, 255),

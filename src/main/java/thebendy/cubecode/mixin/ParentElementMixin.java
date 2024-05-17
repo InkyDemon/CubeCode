@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import thebendy.cubecode.client.imgui.ImGuiLoader;
+import thebendy.cubecode.client.imgui.basic.ImGuiLoader;
 
 @Mixin(ParentElement.class)
 public interface ParentElementMixin {
