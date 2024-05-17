@@ -13,7 +13,7 @@ public class ScriptsView extends View {
 
     @Override
     public String getName() {
-        return String.format("Script##%s", uniqueID);
+        return String.format("Scripts##%s", uniqueID);
     }
 
     @Override
