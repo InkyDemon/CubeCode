@@ -3,7 +3,6 @@
   "package": "com.cubecode.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "EntityMixin"
   ],
   "client": [
     "ParentElementMixin",
