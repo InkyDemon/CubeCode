@@ -10,9 +10,9 @@
 	"icon": "assets/cubecode/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": ["thebendy.cubecode.CubeCode"],
+		"main": ["com.cubecode.CubeCode"],
 		"client": [
-			"thebendy.cubecode.CubeCodeClient"
+			"com.cubecode.CubeCodeClient"
 		]
 	},
 	"mixins": ["cubecode.mixins.json"],
