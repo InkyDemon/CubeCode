@@ -1,44 +1,36 @@
 package com.cubecode.api.scripts;
 
-import org.apache.commons.io.FileUtils;
+import com.cubecode.api.utils.DirectoryManager;
 import org.jetbrains.annotations.Nullable;
 import org.mozilla.javascript.*;
 import com.cubecode.utils.CubeCodeException;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ScriptManager {
-    private Map<String, Script> scripts = new HashMap<>();
-    private final File scriptsFolder;
+public class ScriptManager extends DirectoryManager {
+    private Map<String, Script> scripts;
 
-    public ScriptManager(File scriptsFolder) {
-        this.scriptsFolder = scriptsFolder;
-        this.scriptsFolder.mkdirs();
-
-        updateScripts();
+    public ScriptManager(File scriptsDirectory) {
+        super(scriptsDirectory);
+        this.updateScripts();
     }
 
     public void updateScripts() {
         Map<String, Script> newScripts = new HashMap<>();
 
-        Arrays.stream(scriptsFolder.listFiles()).forEach(file -> {
-            try {
-                newScripts.put(file.getName(), new Script(FileUtils.readFileToString(file, Charset.defaultCharset())));
-            } catch (IOException exception) {
-                exception.printStackTrace();
+        this.getFiles().forEach(file -> {
+            if (file.getName().endsWith(".js")) {
+                newScripts.put(file.getName(), new Script(this.readFileString(file.getName())));
             }
         });
 
-        scripts = newScripts;
+        this.scripts = newScripts;
     }
 
-    public void executeScript(String scriptId, @Nullable Map<String, Object> properties) throws CubeCodeException {
-        scripts.get(scriptId).execute(scriptId, properties);
+    public void executeScript(String name, @Nullable Map<String, Object> properties) throws CubeCodeException {
+        this.scripts.get(name).execute(name, properties);
     }
 
     public static void evalCode(String code, int line, String sourceName, @Nullable Map<String, Object> properties) throws CubeCodeException {
@@ -66,6 +58,6 @@ public class ScriptManager {
     }
 
     public Map<String, Script> getScripts() {
-        return scripts;
+        return this.scripts;
     }
 }
