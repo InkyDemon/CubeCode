@@ -29,11 +29,7 @@ public final class CubeCodeCommand {
     }
 
     private static int execScript(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        HashMap<String, Object> properties = new HashMap<>();
-        properties.put("Player", ScriptEntity.create(context.getSource().getPlayer()));
-        properties.put("Server", new ScriptServer(context.getSource().getServer()));
-        properties.put("World", new ScriptWorld(context.getSource().getWorld()));
-        properties.put("CubeCode", new ScriptFactory());
+        HashMap<String, Object> properties = CubeCodeCommand.createProperties(context);
         String scriptId = MessageArgumentType.getMessage(context, "scriptId").getString();
 
         CubeCode.scriptManager.updateScripts();
@@ -48,11 +44,7 @@ public final class CubeCodeCommand {
     }
 
     private static int evalCode(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        HashMap<String, Object> properties = new HashMap<>();
-        properties.put("Player", ScriptEntity.create(context.getSource().getPlayer()));
-        properties.put("Server", new ScriptServer(context.getSource().getServer()));
-        properties.put("World", new ScriptWorld(context.getSource().getWorld()));
-        properties.put("CubeCode", new ScriptFactory());
+        HashMap<String, Object> properties = CubeCodeCommand.createProperties(context);
         String code = MessageArgumentType.getMessage(context, "script").getString();
 
         try {
@@ -62,5 +54,15 @@ public final class CubeCodeCommand {
         }
 
         return Command.SINGLE_SUCCESS;
+    }
+
+    private static HashMap<String, Object> createProperties(CommandContext<ServerCommandSource> context) {
+        HashMap<String, Object> properties = new HashMap<>();
+        properties.put("Player", ScriptEntity.create(context.getSource().getPlayer()));
+        properties.put("Server", new ScriptServer(context.getSource().getServer()));
+        properties.put("World", new ScriptWorld(context.getSource().getWorld()));
+        properties.put("CubeCode", new ScriptFactory());
+
+        return properties;
     }
 }

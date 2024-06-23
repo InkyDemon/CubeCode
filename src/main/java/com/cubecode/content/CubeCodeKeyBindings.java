@@ -10,14 +10,14 @@ import java.util.Arrays;
 
 public final class CubeCodeKeyBindings {
 
-    public static final String CUBECODE_CATEGORY = "CubeCode";
-    public static final KeyBinding SCRIPTS_MENU = new KeyBinding("Scripts Menu", GLFW.GLFW_KEY_EQUAL, CUBECODE_CATEGORY);
+    private static final String CUBECODE_CATEGORY = "CubeCode";
+    private static final KeyBinding DASHBOARD = new KeyBinding("Dashboard", GLFW.GLFW_KEY_EQUAL, CUBECODE_CATEGORY);
 
     public static void init() {
-        registerKeyBindings(SCRIPTS_MENU);
+        CubeCodeKeyBindings.registerKeyBindings(DASHBOARD);
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (SCRIPTS_MENU.wasPressed()) {
+            while (DASHBOARD.wasPressed()) {
                 client.setScreen(new DashboardScreen());
             }
         });

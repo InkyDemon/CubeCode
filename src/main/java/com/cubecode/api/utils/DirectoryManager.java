@@ -9,19 +9,19 @@ import java.util.Objects;
 import java.util.Set;
 
 public abstract class DirectoryManager {
-    protected final File directory;
+    protected final File DIRECTORY;
 
     public DirectoryManager(File directory) {
-        this.directory = directory;
-        this.directory.mkdirs();
+        this.DIRECTORY = directory;
+        this.DIRECTORY.mkdirs();
     }
 
     public File getFile(String name) {
-        return new File(directory, name);
+        return new File(DIRECTORY, name);
     }
 
     public Set<File> getFiles() {
-        return Set.of(Objects.requireNonNull(this.directory.listFiles()));
+        return Set.of(Objects.requireNonNull(this.DIRECTORY.listFiles()));
     }
 
     public String readFileString(String name) {
@@ -47,6 +47,6 @@ public abstract class DirectoryManager {
     }
 
     public File getDirectory() {
-        return this.directory;
+        return this.DIRECTORY;
     }
 }

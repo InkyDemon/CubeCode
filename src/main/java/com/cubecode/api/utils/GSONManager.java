@@ -9,32 +9,32 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public abstract class GSONManager {
-    protected final transient File file;
-    protected final transient Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    protected final transient File FILE;
+    protected final transient Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public GSONManager(File file) {
-        this.file = file;
+        this.FILE = file;
 
         try {
-            this.file.createNewFile();
+            this.FILE.createNewFile();
         } catch (IOException ignored) {
 
         }
     }
 
     public File getFile() {
-        return this.file;
+        return this.FILE;
     }
 
     public void writeJSON(Object clazz) {
-        try (FileWriter writer = new FileWriter(this.file)) {
-            this.gson.toJson(clazz, writer);
+        try (FileWriter writer = new FileWriter(this.FILE)) {
+            this.GSON.toJson(clazz, writer);
         } catch (IOException ignored) {}
     }
 
     public Object readJSON(Class<Object> clazz) {
-        try (FileReader reader = new FileReader(this.file)) {
-            return this.gson.fromJson(reader, clazz);
+        try (FileReader reader = new FileReader(this.FILE)) {
+            return this.GSON.fromJson(reader, clazz);
         } catch (IOException ignored) {
             return null;
         }
